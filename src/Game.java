@@ -40,9 +40,9 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     public void init() {
 
         blobs = new ArrayList<>();
-        for(int i = 0; i < 25; i++)
-            blobs.add(new Trap(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getWidth()-100) * Math.random()),
-                    15,15,2,2,Color.RED));
+        for(int i = 0; i < 10; i++)
+            blobs.add(new Trap(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
+                    4,4,2,2,Color.RED));
 
     }
 
@@ -67,7 +67,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 //        collision();
 
 //        blobs.get(0).playerMove();
-        for(int i = 1; i < blobs.size(); i++) {
+        for(int i = 0; i < blobs.size(); i++) {
             blobs.get(i).move();
         }
         repaint();

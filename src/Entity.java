@@ -6,11 +6,11 @@ import java.awt.*;
 public abstract class Entity {
 //test in html window
     Game game;
-    private int x, y, width, height;
+    private double x, y, width, height;
     private double dx, dy;
     private Color color;
 
-    public Entity(Game game, int x, int y, int width, int height, double dx, double dy, Color color) {
+    public Entity(Game game, double x, double y, double width, double height, double dx, double dy, Color color) {
         this.game = game;
         this.x = x;
         this.y = y;
@@ -23,6 +23,30 @@ public abstract class Entity {
 
     public void move() {
 
+        if(this instanceof Trap) {
+            double shift = (System.currentTimeMillis() % 16)/10;
+
+            dx = Math.random()*3-1.5;
+            dy = Math.random()*3-1.5;
+
+            if(dx < 0) dx -= shift;
+            else dx -= shift;
+            if(dy < 0) dy -= shift;
+            else dy -= shift;
+        }
+
+        double nextTop = y + dy;
+        double nextRight = x + dx + width;
+        double nextBottom = y + dy + height;
+        double nextLeft = x + dx;
+
+        if(nextLeft < 0 || nextRight + width > game.getWidth()) dx *= -1;
+        if(nextTop < 0 || nextBottom + height > game.getHeight()) dy *= -1;
+
+        x+=dx;
+        y+=dy;
+
+
     }
 
     public void collision() {
@@ -32,37 +56,43 @@ public abstract class Entity {
     public abstract void paint(Graphics g);
 
 
+    public Game getGame() {
+        return game;
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
