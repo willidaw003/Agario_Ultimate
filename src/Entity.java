@@ -4,7 +4,7 @@ import java.awt.*;
  * Created by weavechr000 on 2/10/2017.
  */
 public abstract class Entity {
-//test
+//test in html window
     Game game;
     private int x, y, width, height;
     private double dx, dy;
