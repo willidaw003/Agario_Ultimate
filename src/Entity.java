@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by weavechr000 on 2/10/2017.
@@ -21,7 +22,7 @@ public abstract class Entity {
         this.color = color;
     }
 
-    public void playerMove(int mouseX, int mouseY) {
+    public void playerMove(int mouseX, int mouseY, ArrayList<int[]> mouseArray) {
 
         mouseX += width/2;
         mouseY += width/2;
@@ -29,14 +30,14 @@ public abstract class Entity {
         double distance = Math.sqrt(Math.pow(x-mouseX, 2) + Math.pow(y-mouseY, 2));
         System.out.println(distance);
 
-        if(distance > Math.pow(width, 2)){
-//            speed+10;
-        }
+        double accel = distance / (width*7);
+        if(accel > 1.7) accel = 1.7;
 
-        if(x < mouseX) x += dx;
-        else x -= dx;
-        if(y < mouseY) y += dy;
-        else y -= dy;
+        if(x < (mouseX - width)) x = x + dx * accel;
+        else x = x - dx * accel;
+
+        if(y < (mouseY - width)) y = y + dy * accel;
+        else y = y - dy * accel;
 
     }
 

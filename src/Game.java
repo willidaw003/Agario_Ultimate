@@ -66,11 +66,22 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     }
 
+    public ArrayList<int[]> mouseArray() {
+
+        long time = System.currentTimeMillis()
+
+        while(System.currentTimeMillis() + 333 )
+
+
+
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 //        collision();
 
-        blobs.get(0).playerMove(mouseX, mouseY);
+        blobs.get(0).playerMove(mouseX, mouseY, mouseArray());
         for(int i = 1; i < blobs.size(); i++) {
             blobs.get(i).move();
         }
