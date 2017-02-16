@@ -21,6 +21,25 @@ public abstract class Entity {
         this.color = color;
     }
 
+    public void playerMove(int mouseX, int mouseY) {
+
+        mouseX += width/2;
+        mouseY += width/2;
+
+        double distance = Math.sqrt(Math.pow(x-mouseX, 2) + Math.pow(y-mouseY, 2));
+        System.out.println(distance);
+
+        if(distance > Math.pow(width, 2)){
+//            speed+10;
+        }
+
+        if(x < mouseX) x += dx;
+        else x -= dx;
+        if(y < mouseY) y += dy;
+        else y -= dy;
+
+    }
+
     public void move() {
 
         if(this instanceof Trap) {
@@ -30,9 +49,9 @@ public abstract class Entity {
             dy = Math.random()*3-1.5;
 
             if(dx < 0) dx -= shift;
-            else dx -= shift;
+            else dx += shift;
             if(dy < 0) dy -= shift;
-            else dy -= shift;
+            else dy += shift;
         }
 
         double nextTop = y + dy;

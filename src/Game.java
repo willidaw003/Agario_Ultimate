@@ -10,6 +10,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     Timer timer;
     ArrayList<Entity> blobs;
+    int mouseX, mouseY;
 
     public Game() {
 
@@ -25,6 +26,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 //        frame.setIconImage(icon);
 
         frame.add(this);
+        frame.addMouseMotionListener(this);
         frame.pack();
         frame.setLocationRelativeTo(null);
     }
@@ -40,9 +42,11 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     public void init() {
 
         blobs = new ArrayList<>();
+        blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
+                10,10,2,2,Color.GREEN));
         for(int i = 0; i < 10; i++)
             blobs.add(new Trap(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    4,4,2,2,Color.RED));
+                    4,4,.2,.2,Color.RED));
 
     }
 
@@ -66,8 +70,8 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     public void actionPerformed(ActionEvent e) {
 //        collision();
 
-//        blobs.get(0).playerMove();
-        for(int i = 0; i < blobs.size(); i++) {
+        blobs.get(0).playerMove(mouseX, mouseY);
+        for(int i = 1; i < blobs.size(); i++) {
             blobs.get(i).move();
         }
         repaint();
@@ -81,6 +85,9 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     @Override
     public void mouseMoved(MouseEvent e) {
+
+        mouseX = e.getX() - 3;
+        mouseY = e.getY() - 25;
 
     }
 
