@@ -7,7 +7,7 @@ public class Trap extends Entity {
 
 
     public Trap(Game game, double x, double y, double width, double height, double dx, double dy, Color color) {
-        super(game, x, y, width, height, dx, dy, color);
+        super(game, x, y, width, height, dx, dy, color, "");
     }
 
     @Override

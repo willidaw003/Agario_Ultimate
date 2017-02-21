@@ -43,10 +43,14 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
         blobs = new ArrayList<>();
         blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                10,10,2,2,Color.GREEN));
+                10,10,1,1, Color.GREEN, "player"));
         for(int i = 0; i < 10; i++)
             blobs.add(new Trap(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
                     4,4,.2,.2,Color.RED));
+
+        for(int i = 0; i < 20; i++)
+            blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
+                    4,4,0,0, Color.BLUE, "food"));
 
     }
 
@@ -66,22 +70,11 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     }
 
-    public ArrayList<int[]> mouseArray() {
-
-        long time = System.currentTimeMillis()
-
-        while(System.currentTimeMillis() + 333 )
-
-
-
-
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
 //        collision();
 
-        blobs.get(0).playerMove(mouseX, mouseY, mouseArray());
+        blobs.get(0).playerMove(mouseX, mouseY);
         for(int i = 1; i < blobs.size(); i++) {
             blobs.get(i).move();
         }

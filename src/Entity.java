@@ -10,8 +10,9 @@ public abstract class Entity {
     private double x, y, width, height;
     private double dx, dy;
     private Color color;
+    private String type;
 
-    public Entity(Game game, double x, double y, double width, double height, double dx, double dy, Color color) {
+    public Entity(Game game, double x, double y, double width, double height, double dx, double dy, Color color, String type) {
         this.game = game;
         this.x = x;
         this.y = y;
@@ -20,9 +21,10 @@ public abstract class Entity {
         this.dx = dx;
         this.dy = dy;
         this.color = color;
+        this.type = type;
     }
 
-    public void playerMove(int mouseX, int mouseY, ArrayList<int[]> mouseArray) {
+    public void playerMove(int mouseX, int mouseY) {
 
         mouseX += width/2;
         mouseY += width/2;
@@ -33,12 +35,15 @@ public abstract class Entity {
         double accel = distance / (width*7);
         if(accel > 1.7) accel = 1.7;
 
-        if(x < (mouseX - width)) x = x + dx * accel;
-        else x = x - dx * accel;
+        if(Math.abs(x - mouseX) >= 5) {
+            if (x < (mouseX - width)) x = x + dx * accel;
+            else x = x - dx * accel;
+        }
 
-        if(y < (mouseY - width)) y = y + dy * accel;
-        else y = y - dy * accel;
-
+        if(Math.abs(y - mouseY) >= 5) {
+            if (y < (mouseY - width)) y = y + dy * accel;
+            else y = y - dy * accel;
+        }
     }
 
     public void move() {
@@ -69,8 +74,29 @@ public abstract class Entity {
 
     }
 
-    public void collision() {
+    public void collision(Entity other) {
 
+        if(getBounds().intersects(other.getBounds())) {
+
+            if(other instanceof Trap);
+            else if(other instanceof Circle) {
+                if(other.getType() == "food") {
+                    width += width / 10 + 10;
+                    height += height / 10 + 10;
+                    dx -= .01;
+                    dy -= .01;
+                }
+                else if(other.getType() == "player") {
+                    if(x < other.getX()) dx *= -1;
+                    if(y < other.getY()) dy *= -1;
+                }
+            }
+
+        }
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle((int)x, (int)y, (int)width, (int)height);
     }
 
     public abstract void paint(Graphics g);
@@ -138,5 +164,9 @@ public abstract class Entity {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public String getType() {
+        return type;
     }
 }
