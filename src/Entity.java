@@ -74,25 +74,10 @@ public abstract class Entity {
 
     }
 
-    public void collision(Entity other) {
+    public boolean collides(Entity other) {
 
-        if(getBounds().intersects(other.getBounds())) {
+        return getBounds().intersects(other.getBounds());
 
-            if(other instanceof Trap);
-            else if(other instanceof Circle) {
-                if(other.getType() == "food") {
-                    width += width / 10 + 10;
-                    height += height / 10 + 10;
-                    dx -= .01;
-                    dy -= .01;
-                }
-                else if(other.getType() == "player") {
-                    if(x < other.getX()) dx *= -1;
-                    if(y < other.getY()) dy *= -1;
-                }
-            }
-
-        }
     }
 
     public Rectangle getBounds() {
