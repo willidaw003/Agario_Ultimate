@@ -20,7 +20,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
         frame.setTitle("Agario");
         setPreferredSize(new Dimension(1400,750));
         frame.setResizable(false);
-        setBackground(Color.WHITE);
+        setBackground(Color.BLACK);
 //        ImageIcon pic = new ImageIcon("shapes.png");
 //        Image icon = pic.getImage();
 //        frame.setIconImage(icon);
@@ -44,17 +44,19 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
         blobs = new ArrayList<>();
         blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
                 10,10,1,1, Color.GREEN, "player"));
-        for(int i = 0; i < 15; i++)
-            blobs.add(new Trap(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    4,4,.2,.2,Color.RED));
+        for(int i = 0; i < 15; i++) {
+            blobs.add(new Trap(this, (int) (25 + (getWidth() - 100) * Math.random()), (int) (25 + (getHeight() - 100) * Math.random()),
+                    4, 4, .02, .02, Color.RED));
+            blobs.get(i+1).speed();
+        }
 
         for(int i = 0; i < 40; i++)
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    8,8,0,0, Color.BLUE, "food"));
+                    8,8,0,0, Color.YELLOW, "food"));
 
         for(int i = 0; i < 6; i++)
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    10,10,1,1, Color.CYAN, "enemy"));
+                    10,10,.075,.075, Color.CYAN, "enemy"));
 
 
     }
@@ -78,7 +80,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                     e.setDx(e.getDx() + .01);
                     e.setDy(e.getDy() + .01);
                 }
-                else if(e.getType().equals("player"))
+                else if(e.getType().equals("player"));
 //                else if(other.getType().equals("player")) {
 //                    if(e.getX() < other.getX()) e.setDx(e.getDx() * -1);
 //                    if(e.getY() < other.getY()) e.setDy(e.getDy() * -1);
@@ -98,9 +100,6 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
         super.paint(g);
         for(Entity obj : blobs) {
-            if(obj.getType().equals("food")) {
-                obj.setColor(new Color((int)(Math.random() * 180) + 75, (int)(Math.random() * 180) + 75, (int)(Math.random() * 180) + 75));
-            }
             obj.paint(g);
         }
 
@@ -109,21 +108,39 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        blobs.get(0).playerMove(mouseX, mouseY);
+        boolean iBlob = false, jBlob = false;
+
         for(int i = 0; i < blobs.size(); i++) {
             for(int j = 1; j < blobs.size(); j++) {
 
-                blobs.get(i).move();
-                if(blobs.get(i).collides(blobs.get(j))) {
-                    if(blobs.get(i).getType().equals("player") || blobs.get(i).getType().equals("enemy")) {
-                        collision(blobs.get(i), blobs.get(j));
-                    }
-                    else collision(blobs.get(j), blobs.get(i));
+                if(blobs.get(i).getType().equals("player") || blobs.get(i).getType().equals("enemy")) iBlob = true;
+                if(blobs.get(j).getType().equals("player") || blobs.get(j).getType().equals("enemy")) jBlob = true;
 
-                    if(blobs.get(i).getType().equals("food"))
-                        blobs.remove(i);
-                    if(blobs.get(j).getType().equals("food"))
-                        blobs.remove(j);
+                blobs.get(j).move();
+
+                if(blobs.get(i).collides(blobs.get(j))) {
+
+                    if(iBlob && !jBlob) {
+                        collision(blobs.get(i), blobs.get(j));
+                        if(blobs.get(j).getType().equals("food")) {
+                            blobs.remove(j);
+                            i--;
+                            j--;
+                        }
+                    }
+                    else if(jBlob && iBlob) {
+                        collision(blobs.get(j), blobs.get(i));
+                        if(blobs.get(i).getType().equals("food")) {
+                            blobs.remove(i);
+                            j--;
+                            j--;
+                        }
+                    }
                 }
+
+                iBlob = false;
+                jBlob = false;
 
             }
         }

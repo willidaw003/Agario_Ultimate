@@ -48,18 +48,6 @@ public abstract class Entity {
 
     public void move() {
 
-        if(this instanceof Trap) {
-            double shift = (System.currentTimeMillis() % 16)/10;
-
-            dx = Math.random()*3-1.5;
-            dy = Math.random()*3-1.5;
-
-            if(dx < 0) dx -= shift;
-            else dx += shift;
-            if(dy < 0) dy -= shift;
-            else dy += shift;
-        }
-
         double nextTop = y + dy;
         double nextRight = x + dx + width;
         double nextBottom = y + dy + height;
@@ -70,7 +58,6 @@ public abstract class Entity {
 
         x+=dx;
         y+=dy;
-
 
     }
 
@@ -85,6 +72,13 @@ public abstract class Entity {
     }
 
     public abstract void paint(Graphics g);
+
+    public void speed() {
+        double angle = 2 * Math.PI * Math.random();
+        double speed = .01 + .075 * Math.random();
+        setDx(Math.cos(angle) * speed);
+        setDy(Math.sin(angle) * speed);
+    }
 
 
     public Game getGame() {
