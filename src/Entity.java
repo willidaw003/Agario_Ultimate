@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public abstract class Entity {
     private double dx, dy;
     private Color color;
     private String type;
+    private boolean isDead =false;
 
     public Entity(Game game, double x, double y, double width, double height, double dx, double dy, Color color, String type) {
         this.game = game;
@@ -33,14 +35,14 @@ public abstract class Entity {
         System.out.println(distance);
 
         double accel = distance / (width*7);
-        if(accel > 1.7) accel = 1.7;
+        if(accel > 1.9) accel = 1.9;
 
-        if(Math.abs(x - mouseX) >= 5) {
+        if(Math.abs(x - mouseX) >= 1) {
             if (x < (mouseX - width)) x = x + dx * accel;
             else x = x - dx * accel;
         }
 
-        if(Math.abs(y - mouseY) >= 5) {
+        if(Math.abs(y - mouseY) >= 1) {
             if (y < (mouseY - width)) y = y + dy * accel;
             else y = y - dy * accel;
         }
@@ -75,11 +77,19 @@ public abstract class Entity {
 
     public void speed() {
         double angle = 2 * Math.PI * Math.random();
-        double speed = .01 + .075 * Math.random();
+        double speed = .05 + .07 * Math.random();
         setDx(Math.cos(angle) * speed);
         setDy(Math.sin(angle) * speed);
     }
 
+    public void die() {
+
+        setColor(Color.RED);
+        setWidth(10000);
+        setHeight(10000);
+        JOptionPane.showMessageDialog(game, "You died!");
+
+    }
 
     public Game getGame() {
         return game;
