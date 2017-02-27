@@ -86,11 +86,11 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
             }
             if(isBattle) {
                 if(e.getWidth() > other.getWidth() * 1.2) {
-                    e.setWidth(e.getWidth() + other.getWidth() * .75);
-                    e.setHeight(e.getHeight() + other.getHeight() * .75);
+                    e.setWidth(e.getWidth() + other.getWidth() * .25);
+                    e.setHeight(e.getHeight() + other.getHeight() * .25);
                     e.setDx(e.getDx() < 0 ? e.getDx() + other.getWidth()*.00007 : e.getDx() - other.getWidth()*.00007);
                     e.setDy(e.getDy() < 0 ? e.getDy() + other.getWidth()*.00007 : e.getDy() - other.getWidth()*.00007);
-                    e.setSlowDown(e.getSlowDown() + other.getWidth() / 3);
+                    e.setSlowDown(e.getSlowDown() + other.getWidth() / 5);
                     return 1;
                 }
                 else if(other.getWidth() > e.getWidth() * 1.2) {
@@ -98,7 +98,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                     other.setHeight(other.getHeight() + e.getHeight() * .75);
                     other.setDx(other.getDx() < 0 ? other.getDx() + e.getWidth()*.00007 : other.getDx() - e.getWidth()*.00007);
                     other.setDy(other.getDy() < 0 ? other.getDy() + e.getWidth()*.00007 : other.getDy() - e.getWidth()*.00007);
-                    other.setSlowDown(other.getSlowDown() + e.getWidth() / 3);
+                    other.setSlowDown(other.getSlowDown() + e.getWidth() / 5);
                     return 2;
                 }
                 System.out.println("battle");
@@ -111,14 +111,14 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     public void respawn() {
 
-        if(System.currentTimeMillis() % 131 == 0) {
+        if(System.currentTimeMillis() % 1331 == 0) {
             blobs.add(new Trap(this, (int) (25 + (getWidth() - 100) * Math.random()), (int) (25 + (getHeight() - 100) * Math.random()),
                     4, 4, .02, .02, 0, Color.RED));
             blobs.get(blobs.size()-1).speed();
             for(int i = 0; i < 8; i++)
                 blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
                         6,6,0,0, 0,Color.YELLOW, "food"));
-            double r = blobs.get(0).getWidth() * Math.random();
+            double r = blobs.get(0).getWidth() * Math.random() + 5;
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
                     r, r,.075,.075, 0, Color.CYAN, "enemy"));
         }
