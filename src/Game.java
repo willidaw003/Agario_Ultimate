@@ -55,11 +55,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
         for(int i = 0; i < 8; i++)
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    10,10,.075,.075, 0,Color.CYAN, "enemy"));
-
-        for(int i = 0; i < 20; i++)
-        collision(blobs.get(0), blobs.get(10), false);
-
+                    10,10,.045,.045, 0,Color.CYAN, "enemy"));
 
     }
 
@@ -84,6 +80,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                     e.setDx(e.getDx() < 0 ? e.getDx() + .0005 : e.getDx() - .0005);
                     e.setDy(e.getDy() < 0 ? e.getDy() + .0005 : e.getDy() - .0005);
                     e.setSlowDown(e.getSlowDown() + 2);
+                    System.out.println(e.getX());
                 }
                 
             }
@@ -112,6 +109,22 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
         return -1;
     }
 
+    public void respawn() {
+
+        if(System.currentTimeMillis() % 131 == 0) {
+            blobs.add(new Trap(this, (int) (25 + (getWidth() - 100) * Math.random()), (int) (25 + (getHeight() - 100) * Math.random()),
+                    4, 4, .02, .02, 0, Color.RED));
+            blobs.get(blobs.size()-1).speed();
+            for(int i = 0; i < 8; i++)
+                blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
+                        6,6,0,0, 0,Color.YELLOW, "food"));
+            double r = blobs.get(0).getWidth() * Math.random();
+            blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
+                    r, r,.075,.075, 0, Color.CYAN, "enemy"));
+        }
+
+    }
+
 
     public void paint(Graphics g) {
 
@@ -135,8 +148,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                 if(blobs.get(j).getType().equals("player") || blobs.get(j).getType().equals("enemy")) jBlob = true;
 
                 blobs.get(j).move();
-
-                if(blobs.get(i).collides(blobs.get(j))) {
+                if(blobs.get(i).collides(blobs.get(j)) && i != j) {
 
                     if(iBlob && !jBlob) {
                         collision(blobs.get(i), blobs.get(j), false);
@@ -159,7 +171,6 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                         }
                     }
                     else if(iBlob && jBlob) {
-                        System.out.println(123);
                         int delete = collision(blobs.get(j), blobs.get(i), true);
                         if(delete == 1) {
                             if(blobs.get(i).getType().equals("player")) die();
@@ -176,8 +187,10 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                 jBlob = false;
 
             }
+
         }
 
+        respawn();
         repaint();
 
     }
