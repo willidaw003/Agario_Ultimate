@@ -12,9 +12,9 @@ public abstract class Entity {
     private double dx, dy;
     private Color color;
     private String type;
-    private boolean isDead =false;
+    private double slowDown;
 
-    public Entity(Game game, double x, double y, double width, double height, double dx, double dy, Color color, String type) {
+    public Entity(Game game, double x, double y, double width, double height, double dx, double dy, double slowDown, Color color, String type) {
         this.game = game;
         this.x = x;
         this.y = y;
@@ -22,30 +22,28 @@ public abstract class Entity {
         this.height = height;
         this.dx = dx;
         this.dy = dy;
+        this.slowDown = slowDown;
         this.color = color;
         this.type = type;
     }
 
     public void playerMove(int mouseX, int mouseY) {
 
-        mouseX += width/2;
-        mouseY += width/2;
+        mouseX -= width/2;
+        mouseY -= width/2;
+        
+        double rx = mouseX - x;
+        double ry = mouseY - y;
 
-        double distance = Math.sqrt(Math.pow(x-mouseX, 2) + Math.pow(y-mouseY, 2));
-        System.out.println(distance);
+        double dx = rx/slowDown;
+        double dy = ry/slowDown;
+        
+        while(Math.abs(dx) > this.dx) dx *= .9;
+        while(Math.abs(dy) > this.dy) dy *= .9;
+        
+        x = x + dx;
+        y = y + dy;
 
-        double accel = distance / (width*7);
-        if(accel > 1.9) accel = 1.9;
-
-        if(Math.abs(x - mouseX) >= 1) {
-            if (x < (mouseX - width)) x = x + dx * accel;
-            else x = x - dx * accel;
-        }
-
-        if(Math.abs(y - mouseY) >= 1) {
-            if (y < (mouseY - width)) y = y + dy * accel;
-            else y = y - dy * accel;
-        }
     }
 
     public void move() {
@@ -80,15 +78,6 @@ public abstract class Entity {
         double speed = .05 + .07 * Math.random();
         setDx(Math.cos(angle) * speed);
         setDy(Math.sin(angle) * speed);
-    }
-
-    public void die() {
-
-        setColor(Color.RED);
-        setWidth(10000);
-        setHeight(10000);
-        JOptionPane.showMessageDialog(game, "You died!");
-
     }
 
     public Game getGame() {
@@ -158,4 +147,13 @@ public abstract class Entity {
     public String getType() {
         return type;
     }
+
+    public double getSlowDown() {
+        return slowDown;
+    }
+
+    public void setSlowDown(double slowDown) {
+        this.slowDown = slowDown;
+    }
+    
 }

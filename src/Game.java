@@ -42,20 +42,20 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     public void init() {
 
         blobs = new ArrayList<>();
-        blobs.add(new Circle(this,695,375,10,10,1.4,1.4, Color.GREEN, "player"));
+        blobs.add(new Circle(this,695,375,10,10,3.5,3.5,50,Color.GREEN, "player"));
         for(int i = 0; i < 15; i++) {
             blobs.add(new Trap(this, (int) (25 + (getWidth() - 100) * Math.random()), (int) (25 + (getHeight() - 100) * Math.random()),
-                    4, 4, .02, .02, Color.RED));
+                    4, 4, .02, .02, 0, Color.RED));
             blobs.get(i+1).speed();
         }
 
-        for(int i = 0; i < 40; i++)
+        for(int i = 0; i < 50; i++)
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    6,6,0,0, Color.YELLOW, "food"));
+                    6,6,0,0, 0,Color.YELLOW, "food"));
 
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < 8; i++)
             blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
-                    10,10,.075,.075, Color.CYAN, "enemy"));
+                    10,10,.075,.075, 0,Color.CYAN, "enemy"));
 
         for(int i = 0; i < 20; i++)
         collision(blobs.get(0), blobs.get(10), false);
@@ -70,35 +70,48 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     }
 
-    public void collision(Entity e, Entity other, boolean isBattle) {
+    public int collision(Entity e, Entity other, boolean isBattle) {
 
-        if(getBounds().intersects(other.getBounds())) {
+        if(e.getBounds().intersects(other.getBounds())) {
 
             if(other instanceof Trap && e.getType().equals("player")) {
-                e.die();
+                die();
             }
             else if(other instanceof Circle) {
                 if(other.getType().equals("food")) {
-                    e.setWidth(e.getWidth() + e.getWidth() / 700 + 2);
-                    e.setHeight(e.getHeight() + e.getHeight() / 700 + 2);
+                    e.setWidth(e.getWidth() + 1);
+                    e.setHeight(e.getHeight() + 1);
                     e.setDx(e.getDx() < 0 ? e.getDx() + .0005 : e.getDx() - .0005);
                     e.setDy(e.getDy() < 0 ? e.getDy() + .0005 : e.getDy() - .0005);
+                    e.setSlowDown(e.getSlowDown() + 2);
                 }
-                else if(e.getType().equals("player"));
-//                else if(other.getType().equals("player")) {
-//                    if(e.getX() < other.getX()) e.setDx(e.getDx() * -1);
-//                    if(e.getY() < other.getY()) e.setDy(e.getDy() * -1);
-//                }
+                
+            }
+            if(isBattle) {
+                if(e.getWidth() > other.getWidth() * 1.2) {
+                    e.setWidth(e.getWidth() + other.getWidth() * .75);
+                    e.setHeight(e.getHeight() + other.getHeight() * .75);
+                    e.setDx(e.getDx() < 0 ? e.getDx() + other.getWidth()*.00007 : e.getDx() - other.getWidth()*.00007);
+                    e.setDy(e.getDy() < 0 ? e.getDy() + other.getWidth()*.00007 : e.getDy() - other.getWidth()*.00007);
+                    e.setSlowDown(e.getSlowDown() + other.getWidth() / 3);
+                    return 1;
+                }
+                else if(other.getWidth() > e.getWidth() * 1.2) {
+                    other.setWidth(other.getWidth() + e.getWidth() * .75);
+                    other.setHeight(other.getHeight() + e.getHeight() * .75);
+                    other.setDx(other.getDx() < 0 ? other.getDx() + e.getWidth()*.00007 : other.getDx() - e.getWidth()*.00007);
+                    other.setDy(other.getDy() < 0 ? other.getDy() + e.getWidth()*.00007 : other.getDy() - e.getWidth()*.00007);
+                    other.setSlowDown(other.getSlowDown() + e.getWidth() / 3);
+                    return 2;
+                }
+                System.out.println("battle");
             }
 
         }
+        
+        return -1;
     }
 
-//    public void split() {
-//
-//
-//
-//    }
 
     public void paint(Graphics g) {
 
@@ -135,7 +148,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                                 j--;
                         }
                     }
-                    else if(jBlob && iBlob) {
+                    else if(jBlob && !iBlob) {
                         collision(blobs.get(j), blobs.get(i), false);
                         if(blobs.get(i).getType().equals("food")) {
                             blobs.remove(i);
@@ -146,7 +159,16 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                         }
                     }
                     else if(iBlob && jBlob) {
-                        collision(blobs.get(j), blobs.get(i), true);
+                        System.out.println(123);
+                        int delete = collision(blobs.get(j), blobs.get(i), true);
+                        if(delete == 1) {
+                            if(blobs.get(i).getType().equals("player")) die();
+                            blobs.remove(i);
+                        }
+                        else if(delete == 2) {
+                            if(blobs.get(j).getType().equals("player")) die();
+                            blobs.remove(j);
+                        }
                     }
                 }
 
@@ -158,18 +180,11 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
         repaint();
 
+    }
 
-
-//        blobs.get(0).playerMove(mouseX, mouseY);
-//        for(int i = 1; i < blobs.size(); i++) {
-//            blobs.get(i).move();
-//            if(blobs.get(0).collides(blobs.get(i))) {
-//                collision(blobs.get(i));
-//                if(blobs.get(i).getType().equals("food"))
-//                    blobs.remove(i);
-//            }
-//        }
-
+    public void die() {
+        JOptionPane.showMessageDialog(this, "You died!");
+        System.exit(0);
     }
 
 
