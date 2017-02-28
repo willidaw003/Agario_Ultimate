@@ -6,13 +6,14 @@ import java.util.ArrayList;
  * Created by weavechr000 on 2/10/2017.
  */
 public abstract class Entity {
-//test in html window
+    //test in html window
     Game game;
     private double x, y, width, height;
     private double dx, dy;
     private Color color;
     private String type;
     private double slowDown;
+    private int mass;
 
     public Entity(Game game, double x, double y, double width, double height, double dx, double dy, double slowDown, Color color, String type) {
         this.game = game;
@@ -25,22 +26,23 @@ public abstract class Entity {
         this.slowDown = slowDown;
         this.color = color;
         this.type = type;
+        mass = 10;
     }
 
     public void playerMove(int mouseX, int mouseY) {
 
         mouseX -= width/2;
         mouseY -= width/2;
-        
+
         double rx = mouseX - x;
         double ry = mouseY - y;
 
         double dx = rx/slowDown;
         double dy = ry/slowDown;
-        
+
         while(Math.abs(dx) > this.dx) dx *= .9;
         while(Math.abs(dy) > this.dy) dy *= .9;
-        
+
         x = x + dx;
         y = y + dy;
 
@@ -75,9 +77,18 @@ public abstract class Entity {
 
     public void speed() {
         double angle = 2 * Math.PI * Math.random();
-        double speed = .05 + .07 * Math.random();
+        double speed = .03 + .06 * Math.random();
         setDx(Math.cos(angle) * speed);
         setDy(Math.sin(angle) * speed);
+
+        while(x > game.getWidth()/2 - 150 && x < game.getWidth()/2 + 150 &&
+                y > game.getHeight()/2 - 150 && y < game.getHeight()/2 + 150) {
+
+            x = (int) (25 + (getWidth() - 100) * Math.random());
+            y = (int) (25 + (getHeight() - 100) * Math.random());
+
+        }
+
     }
 
     public Game getGame() {
@@ -155,5 +166,15 @@ public abstract class Entity {
     public void setSlowDown(double slowDown) {
         this.slowDown = slowDown;
     }
-    
+
+    public int getMass() {
+        return mass;
+    }
+
+    public void setMass(int mass) {
+        this.mass = mass;
+    }
+
+
+
 }
