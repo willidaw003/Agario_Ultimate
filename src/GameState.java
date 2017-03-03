@@ -9,7 +9,7 @@
  * @author cj
  */
 public class GameState {
-
+    
     static boolean isMenu = true, isPlay = false, isPause = false;
 
     public static void setIsMenu(boolean isMenu) {
@@ -27,13 +27,13 @@ public class GameState {
     public static void toggleMenu() {
         isMenu = !isMenu;
     }
-
+    
     public static void togglePlay() {
         isPlay = !isPlay;
     }
-
+    
     public static void togglePause() {
         isPause = !isPause;
     }
-
+    
 }

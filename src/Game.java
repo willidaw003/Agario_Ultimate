@@ -13,8 +13,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     int mouseX, mouseY;
     Toolkit tk = Toolkit.getDefaultToolkit();
     boolean start = false;
-    int message = 1;
-
+    
     public Game() {
 
         JFrame frame = new JFrame();
@@ -86,7 +85,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                     e.setSlowDown(e.getSlowDown() + 2);
                     e.setMass(e.getMass() + 1);
                 }
-
+                
             }
             if(isBattle) {
                 if(e.getWidth() > other.getWidth() * 1.2) {
@@ -111,7 +110,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
             }
 
         }
-
+        
         return -1;
     }
 
@@ -121,7 +120,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
             for(int i = 0; i < 25; i++)
                 blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
                         6,6,0,0, 0,Color.YELLOW, "food"));
-
+            
             for(int i = 0; i < 3; i++) {
                 double r = blobs.get(0).getWidth() * Math.random() + 5;
                 blobs.add(new Circle(this,(int)(25 + (getWidth()-100) * Math.random()),(int)(25 + (getHeight()-100) * Math.random()),
@@ -131,7 +130,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
         }
         if(System.currentTimeMillis() % 9523 == 0) {
             blobs.add(new Trap(this, (int) (25 + (getWidth() - 100) * Math.random()), (int) (25 + (getHeight() - 100) * Math.random()),
-                    4, 4, .02, .02, 0, Color.RED));
+                        4, 4, .02, .02, 0, Color.RED));
             blobs.get(blobs.size()-1).speed();
         }
 
@@ -141,48 +140,31 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
     public void paint(Graphics g) {
 
         super.paint(g);
-
+        
         if(GameState.isPlay) {
-
+            
             for(Entity obj : blobs) {
                 obj.paint(g);
             }
             g.setFont(new Font("Serif", Font.BOLD, 14));
             g.setColor(Color.WHITE);
-            printSimpleString(Integer.toString(blobs.get(0).getMass()),0,(int)(blobs.get(0).getX() + blobs.get(0).getWidth()/2),
+            printSimpleString(Integer.toString(blobs.get(0).getMass()),0,(int)(blobs.get(0).getX() + blobs.get(0).getWidth()/2), 
                     (int)(blobs.get(0).getY() + blobs.get(0).getWidth()/2), g);
 
         }
         else if(GameState.isMenu) {
-
+            
             g.setFont(new Font("Serif", Font.BOLD, 32));
             g.setColor(Color.WHITE);
-            printSimpleString("Agario" + message, getWidth(), 0, getHeight()/6, g);
+            printSimpleString("Agario", getWidth(), 0, getHeight()/6, g);
             printSimpleString("Play", getWidth(), 0, getHeight()/6*13/5, g);
             g.drawRect(getWidth()/3, getHeight()/6*2, getWidth()/3, getHeight()/6);
-
-            printSimpleString("How to Play", getWidth(), 0, getHeight()/6*4, g);
-
-            g.setFont(new Font("Serif", Font.BOLD, 20));
-            switch(message) {
-                case 1: printSimpleString("Use the mouse to move the green ball. The farther the away the mouse is, the faster the ball goes,",
-                            getWidth(), 0, getHeight()/6*5, g);
-                        printSimpleString("however the closer it is, the more precise you can move.",
-                            getWidth(), 0, getHeight()/6*5 + 25, g); break;
-                case 2: printSimpleString("Eat the cyan blobs to grow in size, but avoid blobs that are bigger than you as well as the red traps.",
-                        getWidth(), 0, getHeight()/6*5, g); break;
-                case 3: printSimpleString("Over time, more blobs and food will spawn. The speed will also speed up and slow down.",
-                        getWidth(), 0, getHeight()/6*5, g); break;
-                case 4: printSimpleString("Right click to pause the game. Use this if you need to go to the bathroom..  Definitely not for cheating..",
-                        getWidth(), 0, getHeight()/6*5, g); break;
-            }
-
-
+        
         }
         else if(GameState.isPause) {
-
+            
             printSimpleString("Right Click to Resume", getWidth(), 0, getHeight()/2, g);
-
+            
         }
 
     }
@@ -195,18 +177,18 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
             entityMovement();
             repaint();
         }
-
+        
     }
-
+    
     public void entityMovement() {
-
+        
         boolean iBlob = false, jBlob = false;
 
         for(int i = 0; i < blobs.size(); i++) {
             for(int j = 1; j < blobs.size(); j++) {
 
                 if(i >= blobs.size() || j >= blobs.size()) break;
-
+                
                 if(blobs.get(i).getType().equals("player") || blobs.get(i).getType().equals("enemy")) iBlob = true;
                 if(blobs.get(j).getType().equals("player") || blobs.get(j).getType().equals("enemy")) jBlob = true;
 
@@ -260,7 +242,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
         JOptionPane.showMessageDialog(this, "You died!");
         System.exit(0);
     }
-
+    
     private void printSimpleString(String s, int width, int XPos, int YPos, Graphics g2d) {
 
         int stringLen = (int)g2d.getFontMetrics().getStringBounds(s, g2d).getWidth();
@@ -271,7 +253,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
+        
     }
 
     @Override
@@ -292,10 +274,10 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
 
         if(GameState.isMenu) {
             if(e.getX() > getWidth()/3 && e.getX() < getWidth()/3*2 && e.getY() > getHeight()/6*2 && e.getY() < getHeight()/6*3) {
-                start = true;
+                start = true; 
             }
         }
-
+        
     }
 
     @Override
@@ -308,7 +290,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                 start = false;
             }
         }
-
+        
         if(GameState.isPlay || GameState.isPause) {
             if(e.getButton() == 3) {
                 GameState.togglePlay();
@@ -317,18 +299,8 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                     timer.restart();
             }
         }
-
-        if(GameState.isMenu) {
-            if(e.getButton() == 1) {
-                if(e.getY() > getHeight()/2) {
-                    System.out.println(message);
-                    if(message == 4) message = 1;
-                    else message += 1;
-                }
-            }
-        }
-
-
+        
+        
     }
 
     @Override

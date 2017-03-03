@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by weavechr000 on 2/10/2017.
  */
 public abstract class Entity {
-    //test in html window
+//test in html window
     Game game;
     private double x, y, width, height;
     private double dx, dy;
@@ -33,16 +33,16 @@ public abstract class Entity {
 
         mouseX -= width/2;
         mouseY -= width/2;
-
+        
         double rx = mouseX - x;
         double ry = mouseY - y;
 
         double dx = rx/slowDown;
         double dy = ry/slowDown;
-
+        
         while(Math.abs(dx) > this.dx) dx *= .9;
         while(Math.abs(dy) > this.dy) dy *= .9;
-
+        
         x = x + dx;
         y = y + dy;
 
@@ -80,15 +80,15 @@ public abstract class Entity {
         double speed = .03 + .06 * Math.random();
         setDx(Math.cos(angle) * speed);
         setDy(Math.sin(angle) * speed);
-
+                
         while(x > game.getWidth()/2 - 150 && x < game.getWidth()/2 + 150 &&
                 y > game.getHeight()/2 - 150 && y < game.getHeight()/2 + 150) {
-
+            
             x = (int) (25 + (getWidth() - 100) * Math.random());
             y = (int) (25 + (getHeight() - 100) * Math.random());
-
+            
         }
-
+          
     }
 
     public Game getGame() {
@@ -174,7 +174,7 @@ public abstract class Entity {
     public void setMass(int mass) {
         this.mass = mass;
     }
-
-
-
+    
+    
+    
 }
