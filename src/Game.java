@@ -290,7 +290,7 @@ public class Game extends JPanel implements ActionListener, MouseMotionListener,
                 start = false;
             }
         }
-        
+       //hot
         if(GameState.isPlay || GameState.isPause) {
             if(e.getButton() == 3) {
                 GameState.togglePlay();
